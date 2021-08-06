@@ -3,7 +3,7 @@ const consts = {
     ROOT_URL: 'http://192.168.43.116:4000/api',
     FEEDS_PER_PAGE: 5,
     COMMENTS_PER_PAGE: 10,
-    WS_URL: 'http://192.168.43.116:4000'
+    BASE_URL: 'http://192.168.43.116:4000'
 }
 
 export default consts
