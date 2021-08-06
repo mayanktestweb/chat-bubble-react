@@ -1,0 +1,48 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-color: wheat;
+}
+
+.pink {
+  background-color: red;
+  color: pink;
+}
+
+.flex_div {
+  max-width: 40vw;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: red;
+  height: 100vh;
+  background-color: white;
+  border: 1px solid white
+}
+
+.hover_effect:hover {
+  opacity: 0.7;
+  cursor: pointer;
+}
+
+.only_small {
+  display: none;
+}
+
+.only_large {
+  display: block;
+}
+
+@media only screen and (max-width: 800px) {
+  .flex_div {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .only_small {
+    display: block;
+  }
+
+  .only_large {
+    display: none;
+  }
+}

@@ -1,24 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import './App.css'
+import './mystyle.css';
+import TextInput from './components/TextInput';
+import useAuth from './hooks/useAuth';
+import Auth from './views/Auth';
+import MainScreen from './views/MainScreen';
+import UserContext from './providers/UserProvider';
+import React, { useEffect, useState } from 'react';
+import { getUserById } from './apis/authApis';
+import jwtDecode from 'jwt-decode';
 
 function App() {
+
+  const [user, setUser] = useState(null)
+
+  useEffect(() => {
+    let token = localStorage.getItem('token')
+    //console.log(token)
+
+    if (token) {
+      (async () => {
+        let { _id } = jwtDecode(token)
+        let res = await getUserById({ _id })
+        setUser(res)
+      })();
+    }
+
+  }, [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <UserContext.Provider value={{ user, setUser }} >
+      <div className="flex_div">
+        {user !== null ? <MainScreen /> : <Auth />}
+      </div>
+    </UserContext.Provider>
   );
 }
 
