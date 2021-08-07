@@ -8,6 +8,9 @@ import UserContext from './providers/UserProvider';
 import React, { useEffect, useState } from 'react';
 import { getUserById } from './apis/authApis';
 import jwtDecode from 'jwt-decode';
+import SocketContext, { socket } from './providers/SocketProvider';
+import { Provider } from 'react-redux';
+import { store } from './store';
 
 function App() {
 
@@ -27,11 +30,23 @@ function App() {
 
   }, [])
 
+
+  useEffect(() => {
+    if (user && socket.connected) {
+      console.log('trying to register user')
+      socket.emit('register_user', user)
+    }
+  }, [user, socket])
+
   return (
     <UserContext.Provider value={{ user, setUser }} >
-      <div className="flex_div">
-        {user !== null ? <MainScreen /> : <Auth />}
-      </div>
+      <SocketContext.Provider value={socket} >
+        <Provider store={store} >
+          <div className="flex_div">
+            {user !== null ? <MainScreen /> : <Auth />}
+          </div>
+        </Provider>
+      </SocketContext.Provider>
     </UserContext.Provider>
   );
 }
