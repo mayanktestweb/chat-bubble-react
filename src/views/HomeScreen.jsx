@@ -3,8 +3,10 @@ import consts from '../config/consts'
 import useAuth from '../hooks/useAuth'
 import ImageListItem from '../components/ImageListItem'
 import SocketContext from '../providers/SocketProvider'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { fetchUserById } from '../apis/usersApis'
+import { useHistory } from 'react-router-dom'
+import { usersToRenderUpdated } from '../store/usersToRenderReducer'
 
 const HomeScreen = () => {
 
@@ -13,13 +15,14 @@ const HomeScreen = () => {
 
     const onlineUsers = useSelector(state => state.onlineUsers)
 
-    const [usersToRender, setUsersToRender] = useState([])
+    const usersToRender = useSelector(state => state.usersToRender)
+    const dispatch = useDispatch()
 
+    const history = useHistory()
 
-
-    // useEffect(() => {
-    //     socket.emit('request_users')
-    // }, [])
+    useEffect(() => {
+        socket.emit('request_users')
+    }, [])
 
     useEffect(() => {
         (async () => {
@@ -33,15 +36,13 @@ const HomeScreen = () => {
                         users.push(newuser)
                     } else users.push(isPresent)
 
-                    setUsersToRender(users)
+                    users = users.filter(usr => usr._id !== user._id)
+                    dispatch(usersToRenderUpdated(users))
                 } catch (error) {
                     console.log(error)
                     alert('something went wrong')
                 }
             }
-            users = users.filter(usr => usr._id !== user._id)
-
-            setUsersToRender(users)
         })();
     }, [onlineUsers])
 
@@ -73,6 +74,8 @@ const HomeScreen = () => {
                         style={{
                             border: '1px solid gray'
                         }}
+
+                        onClick={() => history.push(`/conversation`, { person: user })}
                     >
                         <ImageListItem
                             image={consts.BASE_URL + '/' + user.image}

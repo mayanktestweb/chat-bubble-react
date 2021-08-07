@@ -12,6 +12,9 @@ import SocketContext, { socket } from './providers/SocketProvider';
 import { Provider } from 'react-redux';
 import { store } from './store';
 
+import Conversation from './views/Conversation'
+
+
 function App() {
 
   const [user, setUser] = useState(null)
